@@ -24,7 +24,7 @@ public class LoggingGlobalPreFilter implements GlobalFilter {
         System.out.println(" coming with request....");
         ServerHttpRequest req=exchange.getRequest();
             System.out.println(req.getLocalAddress());
-        logger.info("Global Pre Filter executed");
+//        logger.info("Global Pre Filter executed");
         return chain.filter(exchange);
     }
 }
