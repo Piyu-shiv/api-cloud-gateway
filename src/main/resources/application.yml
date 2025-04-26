@@ -1,0 +1,108 @@
+server:
+  port: 9005
+
+spring:
+  application:
+    name: API-GATEWAY
+  cloud:
+    gateway:
+#      default-filters:
+#        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin RETAIN_FIRST
+#        - StripPrefix=1
+#      globalcors:
+#        cors-configurations:
+#          '[/**]':
+#            allowCredentials: true
+#            allowedOrigins: "http://[0:0:0:0:0:0:0:1]:9005,http://0:0:0:1:9005,http://127.0.0.1:9005,http://127.0.0.1:3001"
+#            allowedHeaders: "*"
+#            allowedMethods: "GET, POST, PATCH, PUT, DELETE, OPTIONS"
+#            maxAge: 3628800
+#        add-to-simple-url-handler-mapping: true
+      routes:
+        - id: DEPARTMENT-SERVICE
+          uri: lb://DEPARTMENT-SERVICE
+          predicates:
+            - Path=/departments/**
+          filters:
+            - RemoveRequestHeader=Cookie
+
+        - id: USER-SERVICE-CHECK
+          uri: lb://USER-SERVICE
+          predicates:
+            - Method=GET
+            - Header=Authorization, Bearer (.*)
+            - Path=/users/
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/USER-SERVICE/(?<segment>.*), /$\{segment}
+        #            - AuthorizationHeaderFilter
+
+        - id: USER-SERVICE
+          uri: lb://USER-SERVICE
+          predicates:
+            - Method=POST
+            - Path=/users/
+
+          filters:
+#            - RemoveRequestHeader=Cookie
+            - RewritePath=/USERS/(?<segment>.*), /$\{segment}
+
+        - id: USER-SERVICE-GET-UPDATE-DELETE
+          uri: lb://USER-SERVICE
+          predicates:
+            - Method=GET,POST
+            - Path=/users/**
+            - Header=Authorization, Bearer (.*)
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/USERS/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
+
+
+        - id: USER-SERVICE-LOGIN
+          uri: lb://USER-SERVICE
+          predicates:
+            - Method=POST
+            - Path=/users/user/login
+          #            - Header=Authorization, Bearer (.*)
+
+
+      discovery:
+        locator:
+          lower-case-service-id: true
+          enabled: true
+
+eureka:
+  client:
+    service-url:
+      default-zone: http://localhost:8761/eureka
+    allow-redirects: true
+
+
+
+token:
+  expiration_time: 1000000
+  secret: piyushpiyushpiyushpiyushpiyushpiyushpiyushpiyushpiyushpiyushpiyushpiyushpiyushpiyushpiyushpiyushpiyushpiyushpiyushpiyushpiyushpiyushpiyushpiyushpiyushpiyushpiyushpiyushpiyushpiyushpiyushpiyushpiyushpiyushpiyushpiyushpiyushpiyushpiyushpiyush
+
+
+
+
+
+  #resilience4j:
+  #  circuitbreaker:
+  #    instances:
+  #        backendA:
+  #            registerHealthIndicator: true
+  #            slidingWindowSize: 100
+  #        backendB:
+  #            registerHealthIndicator: true
+  #            slidingWindowSize: 10
+  #            permittedNumberOfCallsInHalfOpenState: 3
+  #            slidingWindowType: TIME_BASED
+  #            minimumNumberOfCalls: 5
+  #            waitDurationInOpenState: 50s
+  #            failureRateThreshold: 50
+  #            eventConsumerBufferSize: 10
+  #
+
+ 
