@@ -18,5 +18,5 @@ public class CloudGatewayApplication {
 //    public HttpClient httpClient() {
 //        return HttpClient.create().resolver(DefaultAddressResolverGroup.INSTANCE);
 //    }
-//}
 }
+

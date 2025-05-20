@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
@@ -23,7 +25,13 @@ public class LoggingGlobalPreFilter implements GlobalFilter {
             GatewayFilterChain chain) {
         System.out.println(" coming with request....");
         ServerHttpRequest req=exchange.getRequest();
-            System.out.println(req.getLocalAddress());
+
+        if(req.getMethod()== HttpMethod.GET && !req.getHeaders().containsKey("Authorization")){
+            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+            // Optionally, write an error message to the response body
+            // exchange.getResponse().writeWith(Mono.just(exchange.getResponse().bufferFactory().wrap("Error: Missing header".getBytes())));
+            exchange.getResponse().setComplete();
+        }
         logger.info("Global Pre Filter executed");
         return chain.filter(exchange);
     }
