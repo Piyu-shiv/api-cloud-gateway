@@ -122,6 +122,31 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <!-- https://mvnrepository.com/artifact/io.micrometer/micrometer-observation -->
+            <dependency>
+                <groupId>io.micrometer</groupId>
+                <artifactId>micrometer-observation</artifactId>
+                <version>1.14.6</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/io.micrometer/micrometer-tracing-bridge-brave -->
+            <dependency>
+                <groupId>io.micrometer</groupId>
+                <artifactId>micrometer-tracing-bridge-brave</artifactId>
+                <version>1.4.6</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/io.zipkin.reporter2/zipkin-reporter-brave -->
+            <dependency>
+                <groupId>io.zipkin.reporter2</groupId>
+                <artifactId>zipkin-reporter-brave</artifactId>
+                <version>3.4.2</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/io.zipkin.reporter2/zipkin-reporter-brave -->
+            <dependency>
+                <groupId>io.zipkin.reporter2</groupId>
+                <artifactId>zipkin-reporter-brave</artifactId>
+                <version>3.4.2</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

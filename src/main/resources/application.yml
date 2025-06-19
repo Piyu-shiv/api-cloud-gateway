@@ -65,6 +65,13 @@ spring:
             - Method=POST
             - Path=/users/user/login
           #            - Header=Authorization, Bearer (.*)
+
+        - id: USER-SERVICE-ACTUATOR
+          uri: lb://USER-SERVICE
+          predicates:
+                - Method=GET
+                - Path=/users/
+
           filters:
             - RemoveRequestHeader=Cookie
             - RewritePath=/USERS/(?<segment>.*), /$\{segment}
